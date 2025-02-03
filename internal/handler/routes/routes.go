@@ -10,13 +10,15 @@ import (
 
 func SetupRoutes(r *mux.Router, db *gorm.DB) {
 
-	tokoRepo := repository.NewStoreRepository(db)
+	storeRepo := repository.NewStoreRepository(db)
 	userRepo := repository.NewUserRepository(db)
 	addressRepo := repository.NewAddressRepository(db)
 
-	authUsecase := usecase.NewAuthUsecase(userRepo, tokoRepo)
+	authUsecase := usecase.NewAuthUsecase(userRepo, storeRepo)
 	userUsecase := usecase.NewUserUsecase(userRepo, addressRepo)
+	storeUsecase := usecase.NewStoreUsecase(storeRepo)
 
 	AuthRoute(r, authUsecase)
+	StoreRoute(r, storeUsecase)
 	UserRoute(r, userUsecase)
 }

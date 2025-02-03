@@ -22,3 +22,41 @@ func (r *StoreRepository) Create(store *entity.Store) error {
 
 	return nil
 }
+
+func (r *StoreRepository) FindByID(ID uint) (*entity.Store, error) {
+	var store entity.Store
+	err := r.db.Where("id = ?", ID).First(&store).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &store, nil
+}
+
+func (r *StoreRepository) FindByUserID(userID uint) (*entity.Store, error) {
+	var store entity.Store
+	err := r.db.Where("user_id = ?", userID).First(&store).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &store, nil
+}
+func (r *StoreRepository) Update(ID uint, store *entity.Store) error {
+	err := r.db.Model(&entity.Store{}).Where("id = ?", ID).Updates(store).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *StoreRepository) GetAll() ([]entity.Store, error) {
+	var stores []entity.Store
+	err := r.db.Find(&stores).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return stores, nil
+}
