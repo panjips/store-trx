@@ -95,7 +95,3 @@ store-trx/
    ```bash
    go run cmd/api/main.go
    ```
-
---- 
-
-Let me know if you need further customization! 😊
