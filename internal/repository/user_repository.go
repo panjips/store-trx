@@ -32,3 +32,22 @@ func (r *UserRepository) FindByPhoneNumber(phoneNumber string) (*entity.User, er
 
 	return &user, nil
 }
+
+func (r *UserRepository) FindByID(ID uint) (*entity.User, error) {
+	var user entity.User
+	err := r.db.Where("id = ?", ID).First(&user).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func (r *UserRepository) UpdateProfile(ID uint, user *entity.User) error {
+	err := r.db.Model(&entity.User{}).Where("id = ?", ID).Updates(user).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

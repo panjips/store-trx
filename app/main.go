@@ -19,12 +19,6 @@ func main() {
 
 	r := mux.NewRouter()
 
-	// r.Use(middleware.AuthenticationMiddleware)
-	
-	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "Hello, World!")
-	}).Methods("GET")
-
 	routes.SetupRoutes(r.PathPrefix("/api/v1").Subrouter(), db)
 
 	http.ListenAndServe(":8000", r)

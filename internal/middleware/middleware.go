@@ -20,17 +20,14 @@ func AuthenticationMiddleware(next http.Handler) http.Handler {
 		tokenHeader := r.Header.Get("Authorization")
 
 		if tokenHeader == "" {
-			responses.HTTPResponse(w, "error", http.StatusUnauthorized, "Missing token", nil)
+			responses.HTTPResponse(w, "error", http.StatusUnauthorized, "missing token", nil)
 			return
 		}
 
 		requestToken := strings.TrimPrefix(tokenHeader, "Bearer ")
-
-
 		claims, err := utils.ValidateToken(requestToken)
-
 		if err != nil {
-			responses.HTTPResponse(w, "error", http.StatusUnauthorized, "Invalid token", nil)
+			responses.HTTPResponse(w, "error", http.StatusUnauthorized, "invalid token", nil)
 			return
 		}
 		

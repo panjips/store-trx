@@ -29,7 +29,7 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 	var req dto.ReqisterRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		responses.HTTPResponse(w, "error", http.StatusBadRequest, "invalid request body", req)
+		responses.HTTPResponse(w, "error", http.StatusBadRequest, "invalid request body", nil)
 		return
 	}
 
