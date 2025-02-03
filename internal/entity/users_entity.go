@@ -13,8 +13,8 @@ type User struct{
 	Password	string
 	PhoneNumber	string		`gorm:"unique"`
 	BirthDate	*time.Time
-	Gender		string
-	About		string
+	Gender		*string
+	About		*string		
 	Work		string
 	Email		string		`gorm:"unique"`
 	ProvinceID	string		

@@ -3,8 +3,8 @@ package middleware
 import (
 	"context"
 	"net/http"
-	"rakamin-final/internal/handler/responses"
-	"rakamin-final/pkg/utils"
+	"store-trx-go/internal/handler/responses"
+	"store-trx-go/pkg/utils"
 	"strings"
 )
 
@@ -20,7 +20,7 @@ func AuthenticationMiddleware(next http.Handler) http.Handler {
 		tokenHeader := r.Header.Get("Authorization")
 
 		if tokenHeader == "" {
-			responses.HTTPResponse(w, http.StatusUnauthorized, "Missing token", nil)
+			responses.HTTPResponse(w, "error", http.StatusUnauthorized, "Missing token", nil)
 			return
 		}
 
@@ -30,7 +30,7 @@ func AuthenticationMiddleware(next http.Handler) http.Handler {
 		claims, err := utils.ValidateToken(requestToken)
 
 		if err != nil {
-			responses.HTTPResponse(w, http.StatusUnauthorized, "Invalid token", nil)
+			responses.HTTPResponse(w, "error", http.StatusUnauthorized, "Invalid token", nil)
 			return
 		}
 		

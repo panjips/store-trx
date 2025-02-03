@@ -2,7 +2,7 @@ package database
 
 import (
 	"fmt"
-	"rakamin-final/internal/entity"
+	"store-trx-go/internal/entity"
 
 	"gorm.io/gorm"
 )

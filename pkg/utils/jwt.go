@@ -12,6 +12,7 @@ var secretKey []byte = []byte(os.Getenv("SECRET_KEY"))
 type DataClaims struct {
 	ID    uint 		`json:"id"`
 	Email string 	`json:"email"`
+	Admin bool 		`json:"admin"`
 }
 
 type Claims struct {
@@ -19,13 +20,14 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
-func GenerateToken(userID uint, email string) (string, error) {
+func GenerateToken(userID uint, email string, isAdmin bool) (string, error) {
 	expirationTime := time.Now().Add(24 * time.Hour)
 
 	claims := &Claims{
 		DataClaims: DataClaims{
 			ID: userID,
 			Email: email,
+			Admin: isAdmin,
 		},
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),

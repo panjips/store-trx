@@ -2,10 +2,12 @@ package config
 
 import (
 	"fmt"
-	db "rakamin-final/pkg/database"
+	db "store-trx-go/pkg/database"
+
+	"gorm.io/gorm"
 )
 
-func InitConfig() {
+func InitConfig() *gorm.DB {
 	DB, err := db.InitializeDB()
 	if err != nil {
 		fmt.Printf("Failed to initialize database: %v\n", err)
@@ -13,4 +15,6 @@ func InitConfig() {
 
 	db.MigrateEntities(DB)
 	fmt.Println("Successfully initialized database")
+
+	return DB
 }

@@ -2,8 +2,11 @@ package main
 
 import (
 	"fmt"
-	"rakamin-final/pkg/config"
+	"net/http"
+	"store-trx-go/internal/handler/routes"
+	"store-trx-go/pkg/config"
 
+	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 )
 
@@ -12,6 +15,17 @@ func main() {
 	err != nil {
 		fmt.Println("Error loading .env file")
 	}
-	config.InitConfig()
+	db := config.InitConfig()
+
+	r := mux.NewRouter()
+
+	// r.Use(middleware.AuthenticationMiddleware)
 	
+	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "Hello, World!")
+	}).Methods("GET")
+
+	routes.SetupRoutes(r.PathPrefix("/api/v1").Subrouter(), db)
+
+	http.ListenAndServe(":8000", r)
 }
