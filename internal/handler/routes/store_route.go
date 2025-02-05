@@ -12,6 +12,7 @@ func StoreRoute(r *mux.Router, storeHandler *usecase.StoreHandler){
 	
 	store.Use(middleware.AuthenticationMiddleware)
 	store.HandleFunc("/my", storeHandler.GetByUserID).Methods("GET")
+	store.HandleFunc("", storeHandler.GetAll).Methods("GET")
 	store.HandleFunc("/{id}", storeHandler.GetByID).Methods("GET")
 	store.HandleFunc("/{id}", storeHandler.Update).Methods("PUT")
 }

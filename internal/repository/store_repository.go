@@ -2,6 +2,7 @@ package repository
 
 import (
 	"store-trx-go/internal/entity"
+	"store-trx-go/pkg/database"
 
 	"gorm.io/gorm"
 )
@@ -51,9 +52,12 @@ func (r *StoreRepository) Update(ID uint, store *entity.Store) error {
 	return nil
 }
 
-func (r *StoreRepository) GetAll() ([]entity.Store, error) {
+func (r *StoreRepository) GetAll(page int, limit int) ([]entity.Store, error) {
 	var stores []entity.Store
-	err := r.db.Find(&stores).Error
+	
+	paginate := database.NewPaginate(limit, page).PaginatedResult
+	err := r.db.Scopes(paginate).Find(&stores).Error
+
 	if err != nil {
 		return nil, err
 	}

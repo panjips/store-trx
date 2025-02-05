@@ -1,16 +1,19 @@
 package usecase
 
 import (
-	"encoding/json"
+	"context"
+	"fmt"
 	"net/http"
+	"os"
 	"store-trx-go/internal/entity"
-	"store-trx-go/internal/handler/dto"
 	"store-trx-go/internal/handler/responses"
 	"store-trx-go/internal/middleware"
 	"store-trx-go/internal/repository"
-	"store-trx-go/pkg/utils"
+	"store-trx-go/pkg/r2"
 	"strconv"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/gorilla/mux"
 )
 
@@ -23,7 +26,23 @@ func NewStoreUsecase (storeRepo *repository.StoreRepository) *StoreHandler {
 }
 
 func (h *StoreHandler) GetAll(w http.ResponseWriter, r *http.Request) {
-	stores, err := h.storeRepo.GetAll()
+	
+	limitStr := r.URL.Query().Get("limit")
+	limit, err := strconv.Atoi(limitStr)
+
+	if err != nil {
+		responses.HTTPResponse(w, "error", http.StatusBadRequest, "invalid limit parameter", nil)
+		return
+	}
+
+	pageStr := r.URL.Query().Get("page")
+	page, err := strconv.Atoi(pageStr)
+	if err != nil {
+		responses.HTTPResponse(w, "error", http.StatusBadRequest, "invalid page parameter", nil)
+		return
+	}
+
+	stores, err := h.storeRepo.GetAll(page, limit)
 	if err != nil {
 		responses.HTTPResponse(w, "error", http.StatusInternalServerError, "failed to get stores", nil)
 		return
@@ -61,7 +80,6 @@ func (h *StoreHandler) GetByUserID(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *StoreHandler) Update(w http.ResponseWriter, r *http.Request) {
-	var req dto.UpdateStoreRequest
 	var storeIDStr = mux.Vars(r)["id"]
 	storeID, err := strconv.ParseUint(storeIDStr, 10, 32)
 	if err != nil {
@@ -69,20 +87,30 @@ func (h *StoreHandler) Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		responses.HTTPResponse(w, "error", http.StatusBadRequest, "invalid request body", nil)
+	var name = r.FormValue("nama_toko")
+	image, _, err := r.FormFile("photo")
+	if err != nil {
+		responses.HTTPResponse(w, "error", http.StatusBadRequest, "invalid photo", nil)
 		return
 	}
 
-	validationErr := utils.ValidateRequest(req)
-	if validationErr != nil {
-		responses.HTTPResponse(w, "error", http.StatusBadRequest, "validation error", validationErr)
+	var keyImage string = fmt.Sprintf("%s.png", name)
+	uploadFile := &s3.PutObjectInput{
+		Bucket: aws.String(os.Getenv("R2_BUCKET_NAME")),
+		Key: aws.String(keyImage),
+		Body: image,
+	}
+
+	_, err = r2.GetClient().PutObject(context.Background(), uploadFile)
+	if err != nil {
+		responses.HTTPResponse(w, "error", http.StatusBadRequest, "1 validation error", nil)
 		return
 	}
 
+	imageEndpoint := os.Getenv("IMAGE_URL_ENDPOINT")
 	updateStore := &entity.Store{
-		Name: req.Name,
-		ImageURL: req.ImageURL,
+		Name: &name,
+		ImageURL: aws.String(fmt.Sprintf("%s%s", imageEndpoint, keyImage)),
 	}
 
 	err = h.storeRepo.Update(uint(storeID), updateStore)

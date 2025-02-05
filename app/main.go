@@ -18,8 +18,6 @@ func main() {
 	db := config.InitConfig()
 
 	r := mux.NewRouter()
-
 	routes.SetupRoutes(r.PathPrefix("/api/v1").Subrouter(), db)
-
 	http.ListenAndServe(":8000", r)
 }
