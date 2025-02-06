@@ -64,11 +64,11 @@ func (h *CategoryHandler) Update(w http.ResponseWriter, r *http.Request) {
 
 	err = h.categoryRepo.Update(uint(categoryID),category)
 	if err != nil {
-		responses.HTTPResponse(w, "error", http.StatusInternalServerError, "failed to create new category", nil)
+		responses.HTTPResponse(w, "error", http.StatusInternalServerError, "failed to update category", nil)
 		return
 	}
 	
-	responses.HTTPResponse(w, "success", http.StatusCreated, "success to create new category", nil)
+	responses.HTTPResponse(w, "success", http.StatusCreated, "success to update category", nil)
 }
 
 func (h *CategoryHandler) GetAll(w http.ResponseWriter, r *http.Request) {
