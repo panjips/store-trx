@@ -95,7 +95,7 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.userRepo.FindByPhoneNumber(req.PhoneNumber)
+	user, err := h.userRepo.Login(req.PhoneNumber)
 	if err != nil {
 		responses.HTTPResponse(w, "error", http.StatusNotFound, "invalid credential", nil)
 		return

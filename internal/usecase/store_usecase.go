@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"store-trx-go/internal/entity"
 	"store-trx-go/internal/handler/responses"
@@ -110,7 +111,7 @@ func (h *StoreHandler) Update(w http.ResponseWriter, r *http.Request) {
 	imageEndpoint := os.Getenv("IMAGE_URL_ENDPOINT")
 	updateStore := &entity.Store{
 		Name: &name,
-		ImageURL: aws.String(fmt.Sprintf("%s%s", imageEndpoint, keyImage)),
+		ImageURL: aws.String(fmt.Sprintf("%s%s", imageEndpoint, url.PathEscape(keyImage))),
 	}
 
 	err = h.storeRepo.Update(uint(storeID), updateStore)

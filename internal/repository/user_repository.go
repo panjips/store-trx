@@ -2,6 +2,7 @@ package repository
 
 import (
 	"store-trx-go/internal/entity"
+	"store-trx-go/internal/handler/dto"
 
 	"gorm.io/gorm"
 )
@@ -23,7 +24,7 @@ func (r *UserRepository) Create(user *entity.User) error {
 	return nil
 }
 
-func (r *UserRepository) FindByPhoneNumber(phoneNumber string) (*entity.User, error) {
+func (r *UserRepository) Login(phoneNumber string) (*entity.User, error) {
 	var user entity.User
 	err := r.db.Where("phone_number = ?", phoneNumber).First(&user).Error
 	if err != nil {
@@ -33,9 +34,9 @@ func (r *UserRepository) FindByPhoneNumber(phoneNumber string) (*entity.User, er
 	return &user, nil
 }
 
-func (r *UserRepository) FindByID(ID uint) (*entity.User, error) {
-	var user entity.User
-	err := r.db.Where("id = ?", ID).First(&user).Error
+func (r *UserRepository) FindByID(ID uint) (*dto.UserDTO, error) {
+	var user dto.UserDTO
+	err := r.db.Model(&entity.User{}).First(&user, "id = ?", ID).Error
 	if err != nil {
 		return nil, err
 	}

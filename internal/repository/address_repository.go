@@ -2,6 +2,7 @@ package repository
 
 import (
 	"store-trx-go/internal/entity"
+	"store-trx-go/internal/handler/dto"
 
 	"gorm.io/gorm"
 )
@@ -23,9 +24,9 @@ func (r *AddressRepository) Create(address *entity.Address) error {
 	return nil
 }
 
-func (r *AddressRepository) FindByID(ID uint) (*entity.Address, error){
-	var address entity.Address
-	err := r.db.Where("id = ?", ID).First(&address).Error
+func (r *AddressRepository) FindByID(ID uint) (*dto.AddressDTO, error){
+	var address dto.AddressDTO
+	err := r.db.Model(&entity.Address{}).First(&address, ID).Error
 	if err != nil {
 		return nil, err
 	}
@@ -33,9 +34,9 @@ func (r *AddressRepository) FindByID(ID uint) (*entity.Address, error){
 	return &address, nil
 }
 
-func (r *AddressRepository) FindByUserID(userID uint) ([]entity.Address, error) {
-	var addresses []entity.Address
-	err := r.db.Where("user_id = ?", userID).Find(&addresses).Error
+func (r *AddressRepository) FindByUserID(userID uint) ([]dto.AddressDTO, error) {
+	var addresses []dto.AddressDTO
+	err := r.db.Model(&entity.Address{}).Find(&addresses, "user_id = ?", userID).Error
 	if err != nil {
 		return nil, err
 	}
@@ -52,8 +53,8 @@ func (r *AddressRepository) Update(ID uint, address *entity.Address) error {
 	return nil
 }
 
-func (r *AddressRepository) Delete(address *entity.Address) error {
-	err := r.db.Delete(address).Error
+func (r *AddressRepository) Delete(ID uint) error {
+	err := r.db.Delete(&entity.Address{}, ID).Error
 	if err != nil {
 		return err
 	}

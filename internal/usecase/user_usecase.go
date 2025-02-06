@@ -197,17 +197,11 @@ func (h *UserHandler) DeleteAddress(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	address, err := h.addressRepo.FindByID(uint(addressID))
-	if err != nil {
-		responses.HTTPResponse(w, "error", http.StatusNotFound, "address not found", nil)
-		return
-	}
-
-	err = h.addressRepo.Delete(address)
+	err = h.addressRepo.Delete(uint(addressID))
 	if err != nil {
 		responses.HTTPResponse(w, "error", http.StatusInternalServerError, "failed to delete address", nil)
 		return
 	}
 
-	responses.HTTPResponse(w, "success", http.StatusOK, "address deleted successfully", address)
+	responses.HTTPResponse(w, "success", http.StatusOK, "address deleted successfully", nil)
 }

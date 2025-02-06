@@ -12,7 +12,7 @@ var secretKey []byte
 type DataClaims struct {
 	ID    uint 		`json:"id"`
 	Email string 	`json:"email"`
-	Admin bool 		`json:"admin"`
+	Admin bool 		`json:"is_admin"`
 }
 
 type Claims struct {

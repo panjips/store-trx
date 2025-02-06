@@ -2,6 +2,7 @@ package repository
 
 import (
 	"store-trx-go/internal/entity"
+	"store-trx-go/internal/handler/dto"
 	"store-trx-go/pkg/database"
 
 	"gorm.io/gorm"
@@ -24,9 +25,9 @@ func (r *StoreRepository) Create(store *entity.Store) error {
 	return nil
 }
 
-func (r *StoreRepository) FindByID(ID uint) (*entity.Store, error) {
-	var store entity.Store
-	err := r.db.Where("id = ?", ID).First(&store).Error
+func (r *StoreRepository) FindByID(ID uint) (*dto.StoreDTO, error) {
+	var store dto.StoreDTO
+	err := r.db.Model(&entity.Store{}).Where("id = ?", ID).Scan(&store).Error
 	if err != nil {
 		return nil, err
 	}
@@ -34,9 +35,9 @@ func (r *StoreRepository) FindByID(ID uint) (*entity.Store, error) {
 	return &store, nil
 }
 
-func (r *StoreRepository) FindByUserID(userID uint) (*entity.Store, error) {
-	var store entity.Store
-	err := r.db.Where("user_id = ?", userID).First(&store).Error
+func (r *StoreRepository) FindByUserID(userID uint) (*dto.StoreDTO, error) {
+	var store dto.StoreDTO
+	err := r.db.Model(&entity.Store{}).Where("user_id = ?", userID).Scan(&store).Error
 	if err != nil {
 		return nil, err
 	}
@@ -52,11 +53,11 @@ func (r *StoreRepository) Update(ID uint, store *entity.Store) error {
 	return nil
 }
 
-func (r *StoreRepository) GetAll(page int, limit int) ([]entity.Store, error) {
-	var stores []entity.Store
+func (r *StoreRepository) GetAll(page int, limit int) ([]dto.StoreDTO, error) {
+	var stores []dto.StoreDTO
 	
 	paginate := database.NewPaginate(limit, page).PaginatedResult
-	err := r.db.Scopes(paginate).Find(&stores).Error
+	err := r.db.Scopes(paginate).Model(&entity.Store{}).Scan(&stores).Error
 
 	if err != nil {
 		return nil, err

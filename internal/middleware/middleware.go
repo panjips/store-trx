@@ -13,6 +13,7 @@ type contextKey string
 const (
     UserIDKey contextKey = "userID"
     EmailKey  contextKey = "email"
+	AdminKey contextKey = "isAdmin"
 )
 
 func AuthenticationMiddleware(next http.Handler) http.Handler {
@@ -33,7 +34,20 @@ func AuthenticationMiddleware(next http.Handler) http.Handler {
 		
 		ctx := context.WithValue(r.Context(), UserIDKey, claims.DataClaims.ID)
 		ctx = context.WithValue(ctx, EmailKey, claims.DataClaims.Email)
+		ctx = context.WithValue(ctx, AdminKey, claims.DataClaims.Admin)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
+}
 
+func AuthenticationAdmin(next http.Handler) http.Handler {
+	return http.HandlerFunc( func(w http.ResponseWriter, r *http.Request) {
+		var isAdmin bool = r.Context().Value(AdminKey).(bool)
+
+		if !isAdmin {
+			responses.HTTPResponse(w, "error", http.StatusUnauthorized, "unauthorized action", nil)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
 }
