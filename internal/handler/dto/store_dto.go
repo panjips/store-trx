@@ -1,7 +1,7 @@
 package dto
 
 type StoreDTO struct {
-	ID			string		`json:"id"`
+	ID			uint		`json:"id"`
 	Name		string 		`json:"name"`
 	ImageURL	string		`json:"photo"`
 }

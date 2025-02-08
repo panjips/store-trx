@@ -2,7 +2,7 @@ package dto
 
 type UserDTO struct {
 	ID			uint		`json:"id"`
-	Name		string 	`json:"nama"`		
+	Name		string 		`json:"nama"`		
 	PhoneNumber	string		`json:"no_telp"`
 	BirthDate	string		`json:"tanggal_lahir"`
 	Work		string		`json:"pekerjaan"`

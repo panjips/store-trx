@@ -17,4 +17,5 @@ type Product struct {
 	Store			Store		`gorm:"foreignKey:StoreID"`
 	CategoryID		uint		
 	Category		Category	`gorm:"foreignKey:CategoryID"`
+	Photos			[]Photo		`gorm:"foreignKey:ProductID"`
 }

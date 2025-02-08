@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"mime/multipart"
+	"net/url"
 	"os"
 	"sync"
 
@@ -59,4 +61,20 @@ func GetClient() *s3.Client {
 	}
 
 	return InitR2Client()
+}
+
+func UploadFile(keyImage string, image multipart.File ) (string, error) {
+	uploadFile := &s3.PutObjectInput{
+		Bucket: aws.String(os.Getenv("R2_BUCKET_NAME")),
+		Key: aws.String(keyImage),
+		Body: image,
+	}
+
+	_, err := R2Client.PutObject(context.Background(), uploadFile)
+	if err != nil {
+		return "failed upload file", err
+	}
+
+	imageEndpoint := os.Getenv("IMAGE_URL_ENDPOINT")
+	return fmt.Sprintf("%s%s", imageEndpoint, url.PathEscape(keyImage)), nil
 }
