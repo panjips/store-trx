@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"store-trx-go/internal/handler/routes"
 	"store-trx-go/pkg/config"
 
@@ -10,6 +11,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/rs/cors"
 	httpSwagger "github.com/swaggo/http-swagger"
 )
 
@@ -21,7 +23,11 @@ func main() {
 	db := config.InitConfig()
 
 	r := mux.NewRouter()
+
 	r.PathPrefix("/docs/").Handler(httpSwagger.WrapHandler)
 	routes.SetupRoutes(r.PathPrefix("/api/v1").Subrouter(), db)
-	http.ListenAndServe(":8000", r)
+
+	handler := cors.AllowAll().Handler(r)
+	port := os.Getenv("PORT")
+	http.ListenAndServe(fmt.Sprintf(":%s", port), handler)
 }

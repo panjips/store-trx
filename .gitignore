@@ -1,41 +1,30 @@
-# Build output
 /bin/
 /obj/
 
-# Go binaries
 *.exe
 *.test
 *.out
 
-# Dependency directories
 /vendor/
 
-# IDE/Editor specific files
 .vscode/
 .idea/
 *.swp
 
-# Operating system files
 .DS_Store
 Thumbs.db
 
-# Logs
 *.log
 
-# Coverage output
 coverage.out
 *.cov
 
-# Temporary files
 *.tmp
 
-# Environment variable files
 .env
 
-# Docker-related files (if you use Docker)
 docker-compose.override.yml
 .docker/
 
-# Other build artifacts
 *.a
 *.cgo

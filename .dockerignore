@@ -1,0 +1,17 @@
+.git
+.gitignore
+
+*.exe
+*.test
+*.out
+
+/vendor/
+
+.vscode/
+.idea/
+*.swp
+
+.DS_Store
+Thumbs.db
+
+.env

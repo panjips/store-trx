@@ -1,9 +1,9 @@
 package database
 
-
 import (
 	"fmt"
 	"os"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -16,7 +16,7 @@ type DBConfig struct {
 	DBName		string
 }
 
-func (config *DBConfig) BuildDSN() string {
+func (config *DBConfig) BuildDSN() string { 
 	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		config.User,
 		config.Password,
