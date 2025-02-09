@@ -41,7 +41,7 @@ func (h *AuthHandler) Register(w http.ResponseWriter, r *http.Request) {
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
-		responses.HTTPResponse(w, "error", http.StatusInternalServerError, "failed to hash password", nil)
+		responses.HTTPResponse(w, "error", http.StatusInternalServerError, "failed to encrypt password", nil)
 		return
 	}
 

@@ -1,0 +1,1294 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Learning project backend application built with Golang that provides APIs for Store.",
+    "title": "Store Transaction Backend Built with Golang API",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {},
+    "version": "1.0"
+  },
+  "host": "localhost:8000",
+  "basePath": "/api/v1",
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "description": "Authenticate user with phone number and password",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["Authentication"],
+        "summary": "User login",
+        "parameters": [
+          {
+            "description": "User login request body",
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "login successful",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "invalid request body or validation error",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "401": {
+            "description": "invalid password",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "404": {
+            "description": "invalid credentials",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "failed to generate token",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "description": "Create a new user account with personal details",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["Authentication"],
+        "summary": "Register new user",
+        "parameters": [
+          {
+            "description": "User registration request body",
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User registered successfully",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body or validation error",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error while creating user or store",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/category": {
+      "get": {
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Retrieve all categories",
+        "produces": ["application/json"],
+        "tags": ["Category"],
+        "summary": "Get all categories",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token in the format: Bearer {token}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success retrieving categories",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CategoryRequest"
+              }
+            }
+          },
+          "400": {
+            "description": "Failed to retrieve categories",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Create a new category",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["Category"],
+        "summary": "Create category",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token in the format: Bearer {token}"
+          },
+          {
+            "description": "Category creation request body",
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CategoryRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success to create new category",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to create category",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/category/{id}": {
+      "get": {
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Retrieve a category by ID",
+        "produces": ["application/json"],
+        "tags": ["Category"],
+        "summary": "Get category by ID",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token in the format: Bearer {token}"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "uint"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success retrieving category",
+            "schema": {
+              "$ref": "#/definitions/CategoryRequest"
+            }
+          },
+          "400": {
+            "description": "Invalid category ID or failed to retrieve category",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Update a category by ID",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "tags": ["Category"],
+        "summary": "Update category",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token in the format: Bearer {token}"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "uint"
+          },
+          {
+            "description": "Category update request body",
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CategoryRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success updating category",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body or category ID",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to update category",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "description": "Delete a category by ID",
+        "produces": ["application/json"],
+        "tags": ["Category"],
+        "summary": "Delete category",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "type": "string",
+            "description": "Bearer token in the format: Bearer {token}"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "format": "uint"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success deleting category",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid category ID or failed to delete category",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/alamat": {
+      "get": {
+        "tags": ["Address"],
+        "summary": "Get all shipping addresses",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Bearer token: Bearer {token}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/AlamatListResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Address"],
+        "summary": "Create a new shipping address",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Bearer token: Bearer {token}"
+          },
+          {
+            "description": "Create address request body",
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AlamatRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Address created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/SuccessResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/alamat/{id}": {
+      "get": {
+        "tags": ["Address"],
+        "summary": "Get shipping address by ID",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Bearer token: Bearer {token}"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/AlamatResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Address not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Address"],
+        "summary": "Update shipping address by ID",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Bearer token: Bearer {token}"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          },
+          {
+            "description": "Create address request body",
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AlamatRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Address updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Address"],
+        "summary": "Delete shipping address by ID",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Bearer token: Bearer {token}"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Address deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product": {
+      "get": {
+        "tags": ["Product"],
+        "summary": "Get all products",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Bearer token: Bearer {token}"
+          },
+          {
+            "name": "nama_produk",
+            "in": "query",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": { "type": "integer" }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": { "type": "integer" }
+          },
+          {
+            "name": "category_id",
+            "in": "query",
+            "schema": { "type": "integer" }
+          },
+          {
+            "name": "toko_id",
+            "in": "query",
+            "schema": { "type": "integer" }
+          },
+          {
+            "name": "max_harga",
+            "in": "query",
+            "schema": { "type": "integer" }
+          },
+          {
+            "name": "min_harga",
+            "in": "query",
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ProductsResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Product"],
+        "summary": "Create new product",
+        "security": [{ "BearerAuth": [] }],
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Bearer token: Bearer {token}"
+          },
+          {
+            "name": "nama_produk",
+            "in": "formData",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "category_id",
+            "in": "formData",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "harga_reseller",
+            "in": "formData",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "harga_konsumen",
+            "in": "formData",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "stok",
+            "in": "formData",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "deskripsi",
+            "in": "formData",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "type": "file",
+            "description": "Upload multiple files",
+            "name": "photos",
+            "in": "formData",
+            "required": true
+          },
+          {
+            "type": "file",
+            "description": "Upload multiple files",
+            "name": "photos",
+            "in": "formData",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/SuccessResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product/{id}": {
+      "get": {
+        "tags": ["Product"],
+        "summary": "Get product by ID",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Bearer token: Bearer {token}"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ProductResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/toko/my": {
+      "get": {
+        "tags": ["Store"],
+        "summary": "Get my toko",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Bearer token: Bearer {token}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "nama_toko": {
+                      "type": "string"
+                    },
+                    "url_foto": {
+                      "type": "string"
+                    },
+                    "user_id": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/toko/{id}": {
+      "put": {
+        "tags": ["Store"],
+        "summary": "Update profile toko",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Bearer token: Bearer {token}"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the toko to update",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "nama_toko",
+            "in": "formData",
+            "description": "The new name for the toko",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "photo",
+            "in": "formData",
+            "description": "The photo file for the toko",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful update",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "string",
+                  "example": "Update toko succeed"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Store"],
+        "summary": "Get toko by ID",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Bearer token: Bearer {token}"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the toko to retrieve",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful retrieval",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "nama_toko": {
+                      "type": "string"
+                    },
+                    "url_foto": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Toko not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/toko": {
+      "get": {
+        "tags": ["Store"],
+        "summary": "Get all toko",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Bearer token: Bearer {token}"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of records to retrieve",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "nama",
+            "in": "query",
+            "description": "Optional toko name filter",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful retrieval of toko list",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "type": "string"
+                },
+                "errors": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "page": {
+                      "type": "integer"
+                    },
+                    "limit": {
+                      "type": "integer"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "nama_toko": {
+                            "type": "string"
+                          },
+                          "url_foto": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/trx": {
+      "get": {
+        "tags": ["Transaction"],
+        "summary": "Get all transactions",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Bearer token: Bearer {token}"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/TransactionsResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Transaction"],
+        "summary": "Create new transaction",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "Bearer token: Bearer {token}"
+          },
+          {
+            "description": "Category creation request body",
+            "name": "request",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TransactionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/definitions/SuccessResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "LoginRequest": {
+      "type": "object",
+      "required": ["kata_sandi", "no_telp"],
+      "properties": {
+        "kata_sandi": {
+          "type": "string"
+        },
+        "no_telp": {
+          "type": "string"
+        }
+      }
+    },
+    "RegisterRequest": {
+      "type": "object",
+      "required": [
+        "email",
+        "id_kota",
+        "id_provinsi",
+        "kata_sandi",
+        "nama",
+        "no_telp",
+        "pekerjaan",
+        "tanggal_lahir"
+      ],
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "id_kota": {
+          "type": "string"
+        },
+        "id_provinsi": {
+          "type": "string"
+        },
+        "kata_sandi": {
+          "type": "string"
+        },
+        "nama": {
+          "type": "string"
+        },
+        "no_telp": {
+          "type": "string"
+        },
+        "pekerjaan": {
+          "type": "string"
+        },
+        "tanggal_lahir": {
+          "type": "string"
+        }
+      }
+    },
+    "CategoryRequest": {
+      "type": "object",
+      "required": ["nama_category"],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "uint"
+        },
+        "nama_category": {
+          "type": "string"
+        }
+      }
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "nama_produk": { "type": "string" },
+        "slug": { "type": "string" },
+        "harga_reseler": { "type": "integer" },
+        "harga_konsumen": { "type": "integer" },
+        "stok": { "type": "integer" },
+        "deskripsi": { "type": "string" },
+        "toko": { "$ref": "#/definitions/Toko" },
+        "category": { "$ref": "#/definitions/Category" },
+        "photos": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Photo" }
+        }
+      }
+    },
+    "ProductsResponse": {
+      "type": "object",
+      "properties": {
+        "status": { "type": "boolean" },
+        "message": { "type": "string" },
+        "data": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Product" }
+            },
+            "page": { "type": "integer" },
+            "limit": { "type": "integer" }
+          }
+        }
+      }
+    },
+    "TransactionRequest": {
+      "type": "object",
+      "properties": {
+        "method_bayar": { "type": "string" },
+        "alamat_kirim": { "type": "integer" },
+        "detail_trx": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "product_id": { "type": "integer" },
+              "kuantitas": { "type": "integer" }
+            }
+          }
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "status": { "type": "boolean" },
+        "message": { "type": "string" },
+        "errors": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "AlamatRequest": {
+      "type": "object",
+      "properties": {
+        "judul_alamat": { "type": "string" },
+        "nama_penerima": { "type": "string" },
+        "no_telp": { "type": "string" },
+        "detail_alamat": { "type": "string" }
+      }
+    },
+    "AlamatResponse": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "judul_alamat": { "type": "string" },
+        "nama_penerima": { "type": "string" },
+        "no_telp": { "type": "string" },
+        "detail_alamat": { "type": "string" }
+      }
+    },
+    "AlamatListResponse": {
+      "type": "object",
+      "properties": {
+        "status": { "type": "boolean" },
+        "message": { "type": "string" },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AlamatResponse"
+          }
+        }
+      }
+    },
+    "SuccessResponse": {
+      "type": "object",
+      "properties": {
+        "status": { "type": "boolean" },
+        "message": { "type": "string" },
+        "data": { "type": "integer" }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "BearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "JWT Bearer token authentication"
+    }
+  }
+}

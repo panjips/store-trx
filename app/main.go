@@ -6,8 +6,11 @@ import (
 	"store-trx-go/internal/handler/routes"
 	"store-trx-go/pkg/config"
 
+	_ "store-trx-go/docs"
+
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 func main() {
@@ -18,6 +21,7 @@ func main() {
 	db := config.InitConfig()
 
 	r := mux.NewRouter()
+	r.PathPrefix("/docs/").Handler(httpSwagger.WrapHandler)
 	routes.SetupRoutes(r.PathPrefix("/api/v1").Subrouter(), db)
 	http.ListenAndServe(":8000", r)
 }

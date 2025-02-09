@@ -36,6 +36,7 @@ Store Trx is a learning project backend application built with **Golang** that p
 - **MySQL**: Database for storing application data.
 - **JWT**: JSON Web Tokens for authentication.
 - **Gorilla Mux**: HTTP router for handling API routes.
+- **Swaggo**: Swagger Documentation 2.0. for API routes.
 
 ---
 
@@ -85,5 +86,5 @@ store-trx/
 
 3. Start the server:
    ```bash
-   go run cmd/api/main.go
+   go run app/main.go
    ```
