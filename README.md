@@ -16,7 +16,7 @@ Store Trx is a learning project backend application built with **Golang** that p
   - Get store details.
 
 - **Product Management**:
-  - Add, update, and delete products.
+  - Get and create products.
   - Get product details and list all products.
 
 - **Transaction Management**:
