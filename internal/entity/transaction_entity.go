@@ -14,4 +14,5 @@ type Transaction struct {
 	Address 		Address		`gorm:"foreignKey:AddressID"`
 	UserID			uint
 	User  			User		`gorm:"foreignKey:UserID"`
+	DetailTransaction []DetailTransaction	`gorm:"foreignKey:TransactionID"`
 } 

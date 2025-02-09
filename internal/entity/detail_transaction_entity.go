@@ -6,13 +6,11 @@ import (
 
 type DetailTransaction struct {
 	gorm.Model
-	ID 				uint		`gorm:"primaryKey"`
+	ID 				uint			`gorm:"primaryKey"`
 	Quantity		uint
 	TotalPrice		uint
+	ProductID		uint		
+	Product			Product		`gorm:"foreignKey:ProductID"`
 	TransactionID	uint		
-	Transaction		Transaction	`gorm:"foreignKey:TransactionID"`
-	ProductLogID	uint		
-	ProductLog		ProductLog	`gorm:"foreignKey:ProductLogID"`
-	StoreID			uint		
-	Store			Store		`gorm:"foreignKey:StoreID"`
+	Transaction		Transaction		`gorm:"foreignKey:TransactionID"`
 }

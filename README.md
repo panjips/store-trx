@@ -39,11 +39,6 @@ Store Trx is a learning project backend application built with **Golang** that p
 
 ---
 
-## On Development
-- **Transaction Management**
-
----
-
 ## Project Structure
 
 ```
