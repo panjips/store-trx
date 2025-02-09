@@ -46,6 +46,8 @@ Store Trx is a learning project backend application built with **Golang** that p
 store-trx/
 └── app/
 │   └── main.go
+├── docs/                 # Swaggo Open API 2.0.
+├── pkg/                  # Shared utilities (e.g., JWT, config)
 ├── internal/
 │   ├── entity/           # Database models (entities)
 │   ├── repository/       # Database operations
@@ -53,8 +55,7 @@ store-trx/
 │   ├── handler/          # HTTP handlers
 │   │   ├── responses/    # Custom response structures
 │   │   └── routes/       # Route definitions
-│   ├── middleware/       # Middleware for HTTP requests
-│   └── pkg/              # Shared utilities (e.g., JWT, config)
+│   └── middleware/       # Middleware for HTTP requests
 ├── .env                  # Environment variables
 ├── go.mod                # Go module file
 ├── go.sum                # Go module checksum file
